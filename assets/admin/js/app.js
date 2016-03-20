@@ -7,7 +7,8 @@ var MetronicApp = angular.module("MetronicApp", [
     "ui.router", 
     "ui.bootstrap", 
     "oc.lazyLoad",  
-    "ngSanitize"
+    "ngSanitize",
+    "ngPermission"
 ]); 
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
@@ -89,7 +90,7 @@ MetronicApp.controller('FooterController', ['$scope', function($scope) {
 /* Setup Rounting For All Pages */
 MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     // Redirect any unmatched url
-    $urlRouterProvider.otherwise("/brief");  
+    $urlRouterProvider.otherwise("/login");  
     
     $stateProvider
     	.state('brief', {
@@ -102,6 +103,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     	.state('intro', {
             url: "/intro",
             templateUrl: "intro/intro.html",            
+        })
+    	.state('login', {
+            url: "/login",
+            templateUrl: "login/login.html",            
         })
 		// Metronic's structure Introduce Page
         .state('MetroIntro', {

@@ -1,0 +1,25 @@
+<div class="container w-xxl w-auto-xs">
+	<br />
+  <a href class="navbar-brand block m-t">测试系统</a>
+  <div class="m-b-lg">
+    <div class="wrapper text-center">
+      <strong>用户登录</strong>
+    </div>
+    <form name="form" class="form-validation">
+      <div class="text-danger wrapper text-center" ng-show="false">
+          authError
+      </div>
+      <div class="list-group list-group-sm">
+        <div class="list-group-item">
+          <input type="text" placeholder="登录名" class="form-control no-border" required>
+        </div>
+        <div class="list-group-item">
+           <input type="password" placeholder="密码" class="form-control no-border" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-lg btn-danger btn-block" ng-disabled='form.$invalid'>登录</button>
+      <div class="text-center m-t m-b"><a href="http://oa.tuan800-inc.com/forgetPWD.html" target="_blank" class="forgetPswTip">忘记密码？</a></div>
+      <div class="line line-dashed"></div>
+    </form>
+  </div>
+</div>
