@@ -1,0 +1,72 @@
+.message-area {
+    position: fixed;
+    z-index: 1030;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.message-box {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.message-box-btn {
+    margin-right: 10px;
+}
+
+.break-word {
+    word-wrap: break-word;
+}
+
+.label-Java {
+    background-color: #f0ad4e;
+}
+
+.label-Ruby {
+    background-color: #CE2004;
+}
+
+.label-Nodejs {
+    background-color: #5cb85c;
+}
+
+.label-Lua {
+	background-color: #170279;
+}
+
+.label-Golang {
+	background-color: #AB977C;
+}
+
+.label-Python {
+	background-color: #13CC22;
+}
+
+.label-Front {
+    background-color: #337ab7;
+}
+
+.label-Python {
+    background-color: #205007;
+}
+
+.deployment-editor {
+    position: relative;
+    height: 500px;
+    text-align: initial;
+}
+
+.drop-area {
+    width: 100%;
+    height: 100px;
+    border: 3px dashed silver;
+    line-height: 100px;
+    text-align: center;
+    font-size: 36px;
+    color: #d3d3d3;
+}
+
+.tr-error{
+	background-color: #F13636;
+}
