@@ -1,0 +1,36 @@
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="#/dashboard.html">Home</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">Dashboard</a>
+		</li>
+	</ul>
+</div>
+<h3 class="page-title">
+	angularjs操作DOM
+</h3>
+<!-- END PAGE HEADER-->
+<!-- BEGIN MAIN CONTENT -->
+<div ng-controller="echartBarController">
+
+	<div class="note note-success note-bordered">
+		<p>
+			1.angularjs也可以操作DOM元素，但是我们
+		</p>
+		<span class="label label-danger">NOTE:</span> All Metronic features from the HTML version(pages, layout options, components, plugins, etc) are fully compatible in the AngularJS version.</span>
+		</p>
+	</div>
+	<hr />
+
+	<div style="height:500px;" id="barDiv"></div>
+	<hr /> 数据双向绑定：
+	<input ng-model="inputShow" type="text" /><br /><br /> 测试点击按钮：
+	<button ng-click="clickEvent()" type="button" id="testBtn">点来试试</button>
+
+</div>
+<!-- END MAIN CONTENT -->

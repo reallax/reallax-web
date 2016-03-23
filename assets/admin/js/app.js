@@ -90,23 +90,36 @@ MetronicApp.controller('FooterController', ['$scope', function($scope) {
 /* Setup Rounting For All Pages */
 MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     // Redirect any unmatched url
-    $urlRouterProvider.otherwise("/login");  
+    $urlRouterProvider.otherwise("/brief");  
     
     $stateProvider
     	.state('brief', {
             url: "/brief",
             templateUrl: "brief/brief.html",            
         })
-//  	.state('simple', {
-//          url: "/simple",
-//      })
+    	.state('demoConf', {
+            url: "/demoConf",
+            templateUrl: "demo/configuration-ng.html",            
+        })
+    	.state('demoElement', {
+            url: "/demoElement",
+            templateUrl: "demo/bar-ng.html", 
+            controller: "echartBarController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        files: [
+                            '../js/echarts/echarts-all.js',
+                            '../js/demo/bar-ng.js',
+                        ] 
+                    });
+                }]
+            }
+        })
     	.state('intro', {
             url: "/intro",
             templateUrl: "intro/intro.html",            
-        })
-    	.state('login', {
-            url: "/login",
-            templateUrl: "login/login.html",            
         })
 		// Metronic's structure Introduce Page
         .state('MetroIntro', {
@@ -115,7 +128,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
-                        name: 'MetroIntro',
+                        name: 'MetronicApp',
                         files: [
                             'metronic/intro/css/bootstrap-responsive.css',
                             'metronic/intro/google-code-prettify/prettify.css',
