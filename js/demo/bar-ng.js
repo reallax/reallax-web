@@ -5,7 +5,7 @@
 		$scope.inputShow = "欢迎光临！";		
 		$scope.clickEvent = function() {
 			var btn = angular.element(document.getElementById("testBtn"));
-			btn.after("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' value=" + $scope.inputShow + "/>");
+			btn.after("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' value='" + $scope.inputShow + "'>");
 		}
 		
 		var myChart = echarts.init(document.getElementById("barDiv"));

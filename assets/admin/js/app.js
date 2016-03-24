@@ -125,6 +125,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             url: "/demoConf",
             templateUrl: "demo/configuration-ng.html",            
         })
+    	.state('reflink', {
+            url: "/reflink",
+            templateUrl: "all/reflink.html",            
+        })
     	.state('demoElement', {
             url: "/demoElement",
             templateUrl: "demo/bar-ng.html", 
