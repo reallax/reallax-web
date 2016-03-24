@@ -19,35 +19,70 @@
 <div>
 
 	<div class="note note-success note-bordered">
-		<h3>如何使用angular</h3>
+		<h3>什么是模块？</h3>
 		<p>
-			1.构建一个html页面，引入angularjs类库(1.5的版本)，下载地址：
-			<a href="https://angularjs.org/" target="_blank">
-				AngularJS by Google
-			</a>
+			模块是AngularJS应用程序的一个组成部分，Controller、Service、Filter、directive等，都是一个模块的组成部分！
+		</p><br/>
+		<h3>如何定义模块？</h3>
+		<p>
+			在view中，用<span class="label label-danger">ng-app</span>定义一个模块，angular启动会加载此模块。
+			<br/>
+			在js中，用<span class="label label-danger">angular.module('moduleName', [])</span>定义一个模块，通过moduleName来关联view与module。
+			<br />当我们要重用一个模块，那么就需要这样定义模块：<span class="label label-danger">var MetronicApp = angular.module("MetronicApp", ["ui.router", "ui.bootstrap"]);</span>
+			这样我们就可以用："ui.router"和"ui.bootstrap"模块中的指令，服务，过滤器等功能。
+		</p><br/>
+		<h3>模块方法见面礼</h3>
+		<p>
+			angular.module('moduleName').value('valName', 'valValue');  --可以通过valName注入
+			<br />angular.module('moduleName').factory('factoryName', function( injectables ) { ... }); --可以通过factoryName注入
+			<br />angular.module('moduleName').provider('providerName', function( injectables ) { ... });--可以通过providerName注入
+			<br />angular.module('moduleName').service('serviceName', function( injectables ) { ... });	--可以通过serviceName注入
+			<br />angular.module('moduleName').directive('directiveName', function( injectables ) { ... });	--directiveName是可以在view中使用的标签
+			<br />angular.module('moduleName').controller('controllerName', function( injectables ) { ... });	--不解释
+			<br />angular.module('moduleName').constant('constantName', {key1:value1, key2:value2, ... });	--可以通过constantName注入，使用键值对
+			<br />angular.module('moduleName').run(function( injectables ) { ... });--运行块通常用来注册全局的事件监听器
+			<br />angular.module('moduleName').config(function( injectables ) { ... });--有一些快捷方法可供模块调用，效果等同于配置代码块
+			<br /><span class="label label-info">note:</span>factory、provider、service都是定义服务的，directive定义指令，controller定义控制器后面有介绍。
+			<br />value、constant顾名思义，很简单。下面粘贴两段代码，帮助理解run和config：
 		</p><br/>
 		<p>
-			2.ng-app定义angularjs的控制范围，如：<span class="label label-danger">data-ng-app="MetronicApp"</span>
-		</p><br/>
-		<p>
-			3.ng-controller定义angularjs的控制范围，如：<span class="label label-danger">ng-controller="metronicCtrl"</span>
-		</p><br/>
-		<p>
-			4.在js中定义模块(module)和控制器(controller)
+			<span class="label label-info">run()</span>
 			<pre>
-				var metronicApp = angular.module("MetronicApp", []); 	//定义模块，注意与angular.module("MetronicApp")的区别
-				
-				//注意区别：metronicApp.controller('metronicCtrl', function($scope, $rootScope) { ... });
-				metronicApp.controller('metronicCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-					//do something ...
-				}]);
+angular.module('myModule', ['ngRoute'])
+.run(function($rootScope, AuthService) {
+	//通过run方法，注册了一个全局监听事件'$routeChangeStart'，每当页面跳转时，会检查权限
+    $rootScope.$on('$routeChangeStart', function(evt, next, current) {
+        // 如果用户未登录
+        if (!AuthService.userLoggedIn()) {
+            if (next.templateUrl === "login.html") {
+                // 已经转向登录路由因此无需重定向
+            } else {
+                $location.path('/login');
+            }
+        }
+    });
+});
+			</pre>
+			<span class="label label-info">config()</span>
+			<pre>
+angular.module('myModule', []).
+  value('a', 123).
+  factory('a', function() { return 123; }).
+  directive('directiveName', ...).
+  filter('filterName', ...);
+
+// 等同于
+
+angular.module('myModule', []).
+  config(function($provide, $compileProvider, $filterProvider) {
+    $provide.value('a', 123);
+    $provide.factory('a', function() { return 123; });
+    $compileProvider.directive('directiveName', ...);
+    $filterProvider.register('filterName', ...);
+  });
 			</pre>
 		</p><br/>
-		<p>
-			5.完了。但加点解释：
-			<br />angular是一个内置对象，可以通过angular.module("MetronicApp", [])方法来构建一个模块。
-			<br />在模块方法metronicApp.controller('metronicCtrl',function( ... ){ ... })构造一个controller，负责控制ng-controller='metronicCtrl'的视图范围
-		</p><br/>
+		<p>参考链接：<a href="http://docs.ngnice.com/guide/module" target="_blank">何为模块？</a></p>
 	</div>
 </div>
 <!-- END MAIN CONTENT -->
