@@ -7,30 +7,68 @@
 			<i class="fa fa-angle-right"></i>
 		</li>
 		<li>
-			<a href="#">Dashboard</a>
+			<a href="#">angular介绍</a>
 		</li>
 	</ul>
 </div>
 <h3 class="page-title">
-	项目介绍
+	angular介绍
 </h3>
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div>
 
 	<div class="note note-success note-bordered">
-		<h3>Meet Metronic AngularJS Version! <span class="close" data-close="note"></span></h3>
+		<h3>angular的前世</h3>
 		<p>
-			AngularJS version of Metronic gives an extremely fast browsing experience to users. 
-			It uses lazy loading of dependency resources(modules, controllers, templates, jquery plugins, javascripts and even css files) on demand.
-			UI-Router is used for flexible routing with nested views. UI Bootstrap enables using all Bootstrap framework components 
-			with pure AngularJS directives.
+			(我一直记得angularjs也是某个殿堂级人物，在某个节假日，为了打发无聊的时光，用锄头叮叮当当敲出来的。为了写此页，专门找找angular趣事。
+			后来才发现跟python老爷子搞混了。还好还好，扶正了我的人生观，哪那么多NX的人物，老是在无聊的时候开发了那么多NX的玩意儿。不摘要了，感兴趣就点开看看。)
+			<br/>
+			<a href="http://www.csdn.net/article/2013-10-08/2817118-AngularJS-Framework-Google" target="_blank">
+				专访AngularJS框架创始人Misko Hevery
+			</a>
+		</p><br/>
+		<h3>angular有什么好处？</h3>
+		<p>
+			数据双向绑定！其他的全是配菜：mvc, directive, filter, service, 依赖注入。
+		</p><br/>
+		<h3>angular与jquery对比，得从mvc说起！</h3>
+		<p>
+			<span class="label label-danger">Model</span><===>
+			<span class="label label-danger">Controller</span><===>
+			<span class="label label-danger">View</span>
+			<br/>我们都干了些什么？<br/>
+			<span class="label label-danger">取出(/改变)model数据</span><===>
+			<span class="label label-danger">ctrl计算处理</span><===>
+			<span class="label label-danger">展示(/改变)view</span>
+			<br/>jquery做了些什么？在数据的双向绑定上多了一层选择器！通过选择器获取view数据，通过选择器更新view数据。
+			<br/>数据双向绑定做了些什么(不仅angular有双向绑定)？view与model的变化，互相监听，抛弃频繁的选择器取值与赋值，让开发者更专注于逻辑与数据！
+		</p><br/>
+		<h3>mvc顶个鸟用？</h3>
+		<p>
+			<br/>1.功能代码分离，调理清晰（尤其现在是前端规模越来约定，逻辑越来越复杂）
+			<br/>2.方便阅读维护
+			<br/>3.代码功能模块化，可实现功能复用
+		</p><br/>
+		<h3>angular优缺点</h3>
+		<p>
+			<span class="label label-info">优点：</span><br/>
+			1.数据双向绑定，减去了繁琐的dom、css操作；2.mvc实现前台功能代码的模块化和复用；3.丰富的指令，且支持表达式；4.依赖注入<br/>
+			<span class="label label-info">缺点：</span><br/>
+			1.不适用于游戏、图形之类交互频繁的网站，适用于单页面应用的CRUD；2.源码太重，不适于高手试水；3.与jquery插件兼容，可能需要自定义指令，复杂度略高；4.可能有坑，还得踩了才知道
+		</p><br/>
+		<h3>我对angular的露水情</h3>
+		<p>
+			其一：angular的双向数据绑定，在ng-repeat中定义一段代码片段，我只通过修改数组，就可以动态的完成view的改变。<br/>
+			原来jquery是怎么搞的？用字符串拼接出代码片段，用jDom.append( code_snippet )，完成视图变化。如果code_snippet还是有很多事件，那么append()方法后在一个个绑定。因此可能产生很多代码碎片。
+			<br />
+			其二：数据双向绑定对于开发后台应用的化，还真的很省事。
+		</p><br />
+		<h3>angularjs组合拳</h3>
+		<p>
+			Angularjs使用mvc的概念，可以完全完成页面之间的跳转。对于传统的java web开发而言，angular唯一需要的就是从后台获取数据。因此，angularjs可以实现前后分离：前台完成视图、逻辑及页面路由，加载页面后异步从后台获取数据，因为数据双向绑定，通过在controller中改变数据，即可填充view的展示。<br/>
+			对于习惯了java web开发的人来说，freemaker、velocity这样的模板语言在前后分离的项目就不能用了。因为二者是后台编译成html代码返回前台的。换种方式说，我们依然可以按照常规的开发流程，将freemaker或velocity + angularjs的形式整合在一起。ng-app定义了angularjs的控制范围，如果某些页面需要大量的dom操作，或整合了一些难以修改的jquery插件，那么把angularjs类库从此页面移除，将控制权交还给jquery即可
 		</p>
-		<span class="label label-danger">NOTE:</span> All Metronic features from the HTML version(pages, layout options, components, plugins, etc) are fully compatible in the AngularJS version.</span>
-		</p>
-	</div>
-
-	<div class="row">
 	</div>
 </div>
 <!-- END MAIN CONTENT -->

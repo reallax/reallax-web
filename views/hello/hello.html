@@ -1,0 +1,86 @@
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="#/dashboard.html">Home</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">Hello Angular！</a>
+		</li>
+	</ul>
+</div>
+<h3 class="page-title">
+	Hello Angular！
+</h3>
+<!-- END PAGE HEADER-->
+<!-- BEGIN MAIN CONTENT -->
+<div>
+
+	<div class="note note-success note-bordered">
+		<h3>Meet Metronic AngularJS Version! <span class="close" data-close="note"></span></h3>
+		<p>
+			AngularJS version of Metronic gives an extremely fast browsing experience to users. It uses lazy loading of dependency resources(modules, controllers, templates, jquery plugins, javascripts and even css files) on demand. UI-Router is used for flexible
+			routing with nested views. UI Bootstrap enables using all Bootstrap framework components with pure AngularJS directives.
+		</p>
+		<span class="label label-danger">NOTE:</span> All Metronic features from the HTML version(pages, layout options, components, plugins, etc) are fully compatible in the AngularJS version.</span>
+		</p>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-sm-12">
+			<input type="text" ng-model="name" placeholder="麻烦随便写点啥！" /> &nbsp;&nbsp;Hello {{name}}!
+		</div>
+	</div>
+	<hr />
+	<div class="row" ng-controller="helloCtrl2">
+		<div class="col-sm-12"><h3>操作数据既是操作View</h3></div>
+		<div class="col-sm-12">
+			<a ng-click="start()" class="btn btn-default btn-sm blue">开始</a>
+			<a ng-click="stop()" class="btn btn-default btn-sm grey">停止</a>
+		</div>
+		<div class="col-sm-12">
+			<div class="table-scrollable">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th>时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="a in arr">
+							<td>{{a.index}}</td>
+							<td>{{a.dates | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td><a ng-click="showIndex($index+1)" class="btn btn-default btn-sm red">操作</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="note note-info note-bordered">
+		<pre>
+		MetronicApp.controller("helloCtrl2", ["$scope", "$interval", function($scope, $interval) {
+			$scope.arr = [];
+			
+			var cnt = 1;
+			$scope.start =  function() {
+				$interval(function() {
+					if(cnt%10 == 0) {
+						$scope.arr = [];
+					}
+					$scope.arr.push( {index:cnt++, dates:new Date} ); 
+				}, 1000);
+			}
+			
+			$scope.showIndex = function(index) {
+				alert("line number:" + index);
+			}
+		}]);
+		</pre>
+	</div>
+</div>
+<!-- END MAIN CONTENT -->

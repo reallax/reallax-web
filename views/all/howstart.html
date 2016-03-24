@@ -1,0 +1,53 @@
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="#/dashboard.html">Home</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">Dashboard</a>
+		</li>
+	</ul>
+</div>
+<h3 class="page-title">
+	如何搭建angular
+</h3>
+<!-- END PAGE HEADER-->
+<!-- BEGIN MAIN CONTENT -->
+<div>
+
+	<div class="note note-success note-bordered">
+		<h3>如何使用angular</h3>
+		<p>
+			1.构建一个html页面，引入angularjs类库(1.5的版本)，下载地址：
+			<a href="https://angularjs.org/" target="_blank">
+				AngularJS by Google
+			</a>
+		</p><br/>
+		<p>
+			2.ng-app定义angularjs的控制范围，如：<span class="label label-danger">data-ng-app="MetronicApp"</span>
+		</p><br/>
+		<p>
+			3.ng-controller定义angularjs的控制范围，如：<span class="label label-danger">ng-controller="metronicCtrl"</span>
+		</p><br/>
+		<p>
+			4.在js中定义模块(module)和控制器(controller)
+			<pre>
+				var metronicApp = angular.module("MetronicApp", []); 	//定义模块，注意与angular.module("MetronicApp")的区别
+				
+				//注意区别：metronicApp.controller('metronicCtrl', function($scope, $rootScope) { ... });
+				metronicApp.controller('metronicCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
+					//do something ...
+				}]);
+			</pre>
+		</p><br/>
+		<p>
+			5.完了。但加点解释：
+			<br />angular是一个内置对象，可以通过angular.module("MetronicApp", [])方法来构建一个模块。
+			<br />在模块方法metronicApp.controller('metronicCtrl',function( ... ){ ... })构造一个controller，负责控制ng-controller='metronicCtrl'的视图范围
+		</p><br/>
+	</div>
+</div>
+<!-- END MAIN CONTENT -->

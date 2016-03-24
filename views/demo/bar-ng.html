@@ -7,7 +7,7 @@
 			<i class="fa fa-angle-right"></i>
 		</li>
 		<li>
-			<a href="#">Dashboard</a>
+			<a href="#">angularjs操作DOM</a>
 		</li>
 	</ul>
 </div>
@@ -20,9 +20,16 @@
 
 	<div class="note note-success note-bordered">
 		<p>
-			1.angularjs也可以操作DOM元素，但是我们
+			1.angularjs也可以操作DOM元素，虽然ng并不推荐这么做。
 		</p>
-		<span class="label label-danger">NOTE:</span> All Metronic features from the HTML version(pages, layout options, components, plugins, etc) are fully compatible in the AngularJS version.</span>
+		<p>
+			2.如果真的需要操作DOM元素，ng推荐在自定义指令的link中完成。
+		</p>
+		<p>
+			3.当然，为了兼容jquery丰富的插件，有时我们也会试图用DOM的方式来操作View
+		</p>
+		<span class="label label-danger">记住:</span> 
+			4.通过jqLight或jquery操作，改变了view中的model，不会发生数据双向绑定。请参考：<a ng-click="$state.go('dataBind')">数据双向绑定原理</a>
 		</p>
 	</div>
 	<hr />

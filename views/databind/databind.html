@@ -1,0 +1,164 @@
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="#/dashboard.html">Home</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">数据双向绑定原理</a>
+		</li>
+	</ul>
+</div>
+<h3 class="page-title">
+	数据双向绑定原理
+</h3>
+<!-- END PAGE HEADER-->
+<!-- BEGIN MAIN CONTENT -->
+<div>
+
+	<div class="note note-success note-bordered">
+		<p>
+			1.页面加载了angular.js文件后，会运行自执行函数bootstrap()：查找ng-app -> 解析directives -> 加载config,service,controller等 -> 渲染页面
+		</p>
+		<p>
+			2.ng中有一个$scope服务，代表的是一个controller作用域：
+			<br/> &nbsp;&nbsp;每当在view中创建一个ng-model="someName",ng会将someName绑定在$scope上。（view -> model）
+			<br/> &nbsp;&nbsp;也可以在js中用$scope.anotherName来绑定另一个名字，即便另一个名字只是用{{anotherName}}放在view中。(model -> view)
+			<br/> &nbsp;&nbsp;此时无论操作view的数据，或model的数据，双向绑定都能通过$scope联系起来，完成更新。
+			<br/> &nbsp;&nbsp;那么ng到底是怎么完成数据双向绑定的呢？
+		</p>
+		<p>
+			3.这里要扯到3个方法：$watch(), $apply(), $digest()
+			<br/> &nbsp;&nbsp;view中，ng-model定义的变量都会创建至少一个$watch()，形成一个watcher list。（$watch()负责监听model的变化，并记录这些变化。）
+			<br/> &nbsp;&nbsp;view中，事件(click, keypress等)会触发$digest()方法，遍历watcher list，将有变化的数据更新到view的所有位置。
+			<br/> &nbsp;&nbsp;有$apply()什么事？$apply()调用的是$digest()方法，供开发者手动调用$apply()来通知ng触发双向绑定。
+			<br/> &nbsp;&nbsp;什么情况需要手动调用$apply()？
+			<span class="label label-danger">1) 用jquery操作的model改变！</span>（因为ng中，每一个事件的最后，都会调用$digest()方法来触发数据检查；而jquery根本不认识还有$degist()这玩意儿。）
+			<span class="label label-danger">2) 用原始的js操作的model改变！</span>（如：setInterval()与$interval()实验效果是不同的，$interval()是ng封装的服务，其在方法中调用了$degist()，双向绑定依然有效；但用setInterval()就不行了，只有通过$apply()来通知ng完成数据双向绑定。）
+			<br/> &nbsp;&nbsp;什么时候需要用$watch()？如果你需要监听某个model，在model变化后要DIY一些工作，那么$watch()就排上用处了。
+			<br/> &nbsp;&nbsp;什么时候用$digest()？呵呵，没用过，用$apply()即可。三个函数的理解及语法，请参考：
+			<a href="http://www.angularjs.cn/A0a6" target="_blank">理解数据绑定过程</a><br/>
+		</p>
+	</div>
+	<hr />
+	<div class="row" ng-controller="dataBindCtrl1">
+		<div class="col-sm-12">
+			<h2>数据双向绑定失效</h2></div>
+		<div class="col-sm-12">
+			<a class="btn btn-sm blue" ng-click="start()">开始</a>
+			<a class="btn btn-sm red" ng-click="stop()">停止</a>
+		</div>
+		<div class="col-sm-12">
+			计数器：
+			<h2 ng-bind="count"></h2>
+		</div>
+	</div>
+	<div class="note note-info note-bordered">
+		<pre>
+		MetronicApp.controller("dataBindCtrl1", ["$scope", "$interval", "$log",
+			function($scope, $interval, $log) {
+				$scope.count = 0;
+				
+				var timer;
+				$scope.start = function() {
+					timer = setInterval(function() {  
+			          $log.info( $scope.count++ );  //变化不能更新到view
+			        }, 1000);
+				}
+				//注意：$interval是angular自己封装的服务，其每次执行会调用$degist()方法，所以不能用来测试数据双向绑定的效果
+				//这也是为什么推荐在angularjs中，使用ng自己封装的服务
+		//		$scope.start1 = function() {
+		//			timer = $interval(function() {  
+		//	          $scope.count1++;  
+		//	          $log.info($scope.count1);  
+		//	        }, 1000);
+		//		}
+				$scope.stop = function() {
+					clearInterval(timer);
+				}
+			}]);
+		</pre>
+	</div>
+	<hr />
+
+	<div class="row" ng-controller="dataBindCtrl2">
+		<div class="col-sm-12">
+			<h2>$scope.$apply()通知ng刷新view</h2></div>
+		<div class="col-sm-12">
+			<a class="btn btn-sm blue" ng-click="start()">开始</a>
+			<a class="btn btn-sm red" ng-click="stop()">停止</a>
+		</div>
+		<div class="col-sm-12">
+			计数器：
+			<h2 ng-bind="count"></h2>
+		</div>
+	</div>
+	<div class="note note-info note-bordered">
+		<pre>
+			MetronicApp.controller("dataBindCtrl2", ["$scope", function($scope) {
+				$scope.count = 0;
+				
+				var timer;
+				$scope.start = function() {
+					timer = setInterval(function() { 
+						
+				        $scope.$apply(function() {	//用$apply通知angular刷新view
+				        	$scope.count++;
+				        });
+				          
+				        console.info( $scope.count ); 
+			    	}, 1000);
+				}
+				$scope.stop = function() {
+					clearInterval(timer);
+				}
+			}]);	
+			</pre>
+	</div>
+</div>
+<hr />
+<div class="row" ng-controller="dataBindCtrl3">
+	<div class="col-sm-12">
+		<h2>$scope.$watch()监视model</h2></div>
+	<div class="col-sm-12">
+		<a class="btn btn-sm blue" ng-click="start()">开始</a>
+		<a class="btn btn-sm red" ng-click="stop()">停止</a>
+	</div>
+	<div class="col-sm-12">
+		计数器：
+		<h2 ng-bind="count"></h2>
+	</div>
+</div>
+<div class="note note-info note-bordered">
+	<pre>
+			MetronicApp.controller("dataBindCtrl3", ["$scope", function($scope) {
+				$scope.count = 0;
+		
+				var timer;
+				$scope.start = function() {
+					timer = setInterval(function() {
+						
+						$scope.$apply(function() { //用$apply通知angular刷新view
+							$scope.count++;
+						});
+						//注意与下面的方式的区别：
+						//下面的方式不会触发$watch()，因为下面的方法不会触发$degiest(),那么$degist()就不会检查watcher list,即便$scope.count已经注册了watcher list
+		//				$scope.count++;
+		
+					}, 1000);
+				}
+				$scope.stop = function() {
+					clearInterval(timer);
+				}
+				
+				$scope.$watch("count", function(newVal, oldVal) {
+					console.info("$watch方法调用输出count: from" + oldVal + " to " + newVal );
+				});
+			}]);		
+			</pre>
+</div>
+</div>
+</div>
+<!-- END MAIN CONTENT -->

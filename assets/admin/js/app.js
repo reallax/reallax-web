@@ -97,6 +97,30 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             url: "/brief",
             templateUrl: "brief/brief.html",            
         })
+    	.state('howstart', {
+            url: "/howstart",
+            templateUrl: "all/howstart.html",            
+        })
+    	.state('modules', {
+            url: "/modules",
+            templateUrl: "all/modules.html",            
+        })
+    	.state('controllers', {
+            url: "/controllers",
+            templateUrl: "all/controllers.html",            
+        })
+    	.state('services', {
+            url: "/services",
+            templateUrl: "all/services.html",            
+        })
+    	.state('filters', {
+            url: "/filters",
+            templateUrl: "all/filters.html",            
+        })
+    	.state('directives', {
+            url: "/directives",
+            templateUrl: "all/directives.html",            
+        })
     	.state('demoConf', {
             url: "/demoConf",
             templateUrl: "demo/configuration-ng.html",            
@@ -117,9 +141,33 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-    	.state('intro', {
-            url: "/intro",
-            templateUrl: "intro/intro.html",            
+    	.state('dataBind', {
+            url: "/dataBind",
+            templateUrl: "databind/databind.html", 
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        files: [
+                            '../js/databind/databind.js',
+                        ] 
+                    });
+                }]
+            }
+        })
+    	.state('hello', {
+            url: "/hello",
+            templateUrl: "hello/hello.html",   
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        files: [
+                            '../js/hello/hello.js',
+                        ] 
+                    });
+                }]
+            }         
         })
 		// Metronic's structure Introduce Page
         .state('MetroIntro', {
