@@ -107,7 +107,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
     	.state('controllers', {
             url: "/controllers",
-            templateUrl: "all/controllers.html",            
+            templateUrl: "all/controllers.html",     
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        files: [
+                            '../js/all/controllers.js',
+                        ] 
+                    });
+                }]
+            }       
         })
     	.state('services', {
             url: "/services",

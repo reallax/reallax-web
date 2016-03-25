@@ -17,37 +17,110 @@
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div>
-
 	<div class="note note-success note-bordered">
-		<h3>如何使用angular</h3>
+		<h3>什么是controller？</h3>
 		<p>
-			1.构建一个html页面，引入angularjs类库(1.5的版本)，下载地址：
-			<a href="https://angularjs.org/" target="_blank">
-				AngularJS by Google
+			很好理解，不解释。参考：
+			<a href="http://docs.ngnice.com/guide/controller" target="_blank">
+				理解控制器
 			</a>
 		</p><br/>
+		<h3>语法糖</h3>
 		<p>
-			2.ng-app定义angularjs的控制范围，如：<span class="label label-danger">data-ng-app="MetronicApp"</span>
+			myApp.controller('myCtrl', ['$scope', function($scope) { ... }]);
+			<br />myApp.controller('myCtrl', function($scope) { ... });
+			<br /><span class="label label-info">区别：</span> 效果一样。但是如果用文件压缩工具，方式二的$scope参数可能会被改成另一个名字，那么$scope注入就失效了。
 		</p><br/>
+		<h3>重点摘要</h3>
 		<p>
-			3.ng-controller定义angularjs的控制范围，如：<span class="label label-danger">ng-controller="metronicCtrl"</span>
+			1.一个module可以有多个controller，controller之间可平行，可嵌套。
+			<br />2.平行的controller之间，用service来完成数据、方法共享。
+			<br />3.嵌套的controller之间，子controller $scope<span class="label label-danger">不会</span>继承父controller $scope的属性和方法。与$rootScope不是一个概念。
+			<br />4.controller之间，用$on,$emit(),$broadcast()三个方法监听传递事件。
 		</p><br/>
-		<p>
-			4.在js中定义模块(module)和控制器(controller)
-			<pre>
-				var metronicApp = angular.module("MetronicApp", []); 	//定义模块，注意与angular.module("MetronicApp")的区别
-				
-				//注意区别：metronicApp.controller('metronicCtrl', function($scope, $rootScope) { ... });
-				metronicApp.controller('metronicCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-					//do something ...
-				}]);
-			</pre>
-		</p><br/>
-		<p>
-			5.完了。但加点解释：
-			<br />angular是一个内置对象，可以通过angular.module("MetronicApp", [])方法来构建一个模块。
-			<br />在模块方法metronicApp.controller('metronicCtrl',function( ... ){ ... })构造一个controller，负责控制ng-controller='metronicCtrl'的视图范围
-		</p><br/>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-sm-12"><h3>controller作用域之独立</h3></div>
+		<div class="col-sm-12">
+			<div ng-controller="ctrl_grp1_greetCtrl">
+				Hello {{name}}!
+			</div>
+			<div ng-controller="ctrl_grp1_ListCtrl">
+				<ol>
+					<li ng-repeat="name in names">
+						{{name}} from {{department}}
+					</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+	<div class="note note-info note-bordered">
+		
+		一个模块中可以定义多个controller，每个controller都有一个作用域，用$scope表示，$scope中的属性方法只在本controller中有效
+		<br />子controller不能通过$scope继承父controller中的属性和方法
+		<br />$rootScope是根作用域，所有controller都可以访问此作用域中的属性方法
+		<br />$scope与$rootScope之间的区别：$rootScope的作用范围是ng-app包围的部分，任何此模块下的controller都能共享此$rootScope。
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-sm-12"><h3>controller事件传递之：$on(), $emit(), $broadcast()</h3></div>
+		<div class="col-sm-12">
+			<div ng-controller="ctrl_grp2_grandpaCtrl">
+			爷爷级Controller事件  <tt>'aEventName'</tt>count变化: {{count}}
+			<br /><br />
+			<ul>
+				<li ng-repeat="i in [1]" ng-controller="ctrl_grp2_dadCtrl">
+					爸爸级Controller的按钮事件：
+					<button class="btn btn-sm green" ng-click="$emit('aEventName')">
+						$emit('aEventName')
+					</button>
+					<button class="btn btn-sm red" ng-click="$broadcast('aEventName')">
+						$broadcast('aEventName')
+					</button>
+					<br>
+					爸爸级Controller事件  <tt>'aEventName'</tt>count变化：{{count}}
+					<br /><br />
+					<ul>
+						<li ng-repeat="item in [1, 2]" ng-controller="ctrl_grp2_sonCtrl">
+							儿子[{{item}}]的Controller事件  <tt>'aEventName'</tt>  count变化: {{count}}
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		</div>
+	</div>
+	<div class="note note-info note-bordered">
+		controller是可重用的， 对于重用的每个controller，其中的$scope作用域是不一样的
+		<br /><span class="label label-info">$on()：</span>$on('aEventName', function() { ... }):
+			在作用域中注册一个事件，事件名'aEventName'自定义，作用域会负责监听此事件，一旦触发，会调用funtion()。
+		<br /><span class="label label-info">$emit()：</span>$emit('aEventName',function(){ ... }):
+			在作用域中调用此方法，同级、父级controller的$on()会就收到'aEventName'事件，并触发function（）；
+		<br /><span class="label label-info">$broadcast()：</span>$broadcast('aEventName', function(){ ... }):
+			在作用欲中调用此方法，同级、子级controller的$on()会收到'aEventName'事件，并触发function（）。
+		<pre>
+MetronicApp.controller('ctrl_grp2_grandpaCtrl', ['$scope', function($scope) {
+	$scope.count = 0;
+	$scope.$on('aEventName', function() {
+		$scope.count++;
+	});
+}])
+
+MetronicApp.controller('ctrl_grp2_dadCtrl', ['$scope', function($scope) {
+	$scope.count = 0;
+	$scope.$on('aEventName', function() {
+		$scope.count++;
+	});
+}]);
+
+MetronicApp.controller('ctrl_grp2_sonCtrl', ['$scope', function($scope) {
+	$scope.count = 0;
+	$scope.$on('aEventName', function() {
+		$scope.count++;
+	});
+}]);
+		</pre>
 	</div>
 </div>
 <!-- END MAIN CONTENT -->
