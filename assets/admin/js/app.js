@@ -149,7 +149,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
     	.state('directives', {
             url: "/directives",
-            templateUrl: "all/directives.html",            
+            templateUrl: "all/directives.html",        
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        files: [
+                            '../js/all/directives.js',
+                        ] 
+                    });
+                }]
+            }         
         })
     	.state('demoConf', {
             url: "/demoConf",

@@ -19,35 +19,131 @@
 <div>
 
 	<div class="note note-success note-bordered">
-		<h3>如何使用angular</h3>
+		<h3>什么是指令？</h3>
 		<p>
-			1.构建一个html页面，引入angularjs类库(1.5的版本)，下载地址：
-			<a href="https://angularjs.org/" target="_blank">
-				AngularJS by Google
+			用过JSP的人，可以将指令类比成taglib。其实angular view中发挥作用的就是angular自己封装的指令。
+			<br />参考：
+			<a href="http://docs.ngnice.com/guide/directive" target="_blank">
+				AngularJS Directive
 			</a>
 		</p><br/>
+		<h3>常用内建指令有那些？</h3>
 		<p>
-			2.ng-app定义angularjs的控制范围，如：<span class="label label-danger">data-ng-app="MetronicApp"</span>
+			<span class="label label-danger">ng-app</span>
+			<span class="label label-danger">ng-controller</span>
+			<span class="label label-danger">ng-model</span>
+			<span class="label label-danger">ng-bind</span>
+			<span class="label label-danger">ng-click/ng-blur/ng-change ..</span>
+			<span class="label label-success">ng-show/ng-hide/ng-if/ng-class</span>
+			<span class="label label-danger">ng-maxlength/ng-minlength</span>
+			<span class="label label-danger">ng-repeat/ng-option</span>
+			<span class="label label-danger">ng-include</span>
+			<br />注： 对于常用的控制css及展示的绿色几个内建指令，支持表达式
 		</p><br/>
+		<h3>如何自定义指令？</h3>
+		<pre>
+myModule.directive('myDeractive', function() {
+    return {
+        restrict: 'A',
+        template: "字符串拼接的html片段"
+        templateUrl:"view/login.html",
+        replace: boolean,
+        transclude: boolean,
+        scope: {},
+        require:['(?|^|?^| )directiveName1', '(?|^|?^| )directiveName2', ...],
+        controller: function() { ... },
+        controllerAs: 'renameCtrl', 
+        compile: function(el, attrs, transclude) {
+			//TODO
+            //compile函数执行完后，必须返回link函数，供执行。
+            //有compile函数后，在定义link函数是无效的，angular已compile中的return link为主
+            return function(scope, el, attrs, controller) {
+                console.log("repeat...link...");
+            }
+        },
+        link: function(scope, element, attrs, controller) {
+        	//参数解释
+        	//scope:一个指令在多个controller中使用，那么指令就会获得不同的scope，引起属性方法调用异常。
+        	//在指令中定义一个scope（scope:{}），此scope就会覆盖父controller中的scope，多个地方使用的指令有自己独立的scope，一个指令scope变化，不会影响其他同名指令。
+        	//那么此时的指令如何与controller交互？
+        	//如果指令定义了自己的作用域scope，又需要调用controller中的某些属性方法。那么又回到controller之间的交互方法，用服务service注入，来解决directive与controller之间的依赖管理。
+        	
+        	//element:element代表template对象。通过element你可以操作dom元素，也就是说指令操作dom是在link中完成的。Element是jquery对象，用jquery的操作方式，即可完成dom操作。
+        	
+        	//attrs:指令中的属性集合，通过此属性可以获得指令中定义的属性值。注意这里的坑，属性名称会被转换成小写的。如一个指令有个属性叫：myAttr，在link中使用时，要用attrs.myattr，而不是attrs.myAttr
+        	
+        	//controller:如果两个指令直接有依赖关系，controller参数就会获得依赖指令的controller域，获得依赖的属性和方法。见require属性
+        }
+    }
+});
+		</pre>
+		<h3>指令每个参数的含义？</h3>
 		<p>
-			3.ng-controller定义angularjs的控制范围，如：<span class="label label-danger">ng-controller="metronicCtrl"</span>
+			<span class="label label-danger">restrict</span>
+			<br /><span class="label label-info">A</span>属性
+			<span class="label label-info">E</span>元素
+			<span class="label label-info">C</span>样式
+			<span class="label label-info">M</span>注解
+			<br /><span class="label label-danger">templateUrl</span>
+			<br />指令编译后，返回的模板。template/templateUrl二选一，前者用于模板代码很少的情况，否则用后者。
+			<br /><span class="label label-danger">replace</span>
+			<br />boolean值。如果设置为true，那么template中的内容将替换指令的内容，同时替换指令包含的内容
+			<br /><span class="label label-danger">transclude</span>
+			<br />在template中用内置指令ng-transclude占位，angularjs会将自定义指令内部包含的内容替换ng-transclue的位置，避免像replace一样，替换了自定义指令内部包含的内容。
+			<br /><span class="label label-danger">scope</span>
+			<br />如果指令中没有定义scope属性，那么这个参数就是父controller中的scope，可以通过这个scope调用父controller的属性方法；如果有scope，那么一个view多次使用的同一指令，每个指令的scope是单独的作用域
+			<br /><span class="label label-danger">require</span>
+			<br />如果指令之间有依赖，就要通过require指定依赖。
+			参考：
+			<a href="http://my.oschina.net/u/2342955/blog/411508" target="_blank">
+				Require选项的细节
+			</a>
+			<br />例如：指令A依赖于指令B，那么指令A通过require来指定此依赖，且A的link的第四个参数controller获的B指令的controller属性，B.controller定义了一些属性和方法，A可以通过参数controller获得。此属性完成指令之间的交互。语法：require:’^dependencyDirctiveName’（注意符号：^）
+			<br /><span class="label label-danger">controller</span>
+			<br />指令编译后，返回的模板。template/templateUrl二选一，前者用于模板代码很少的情况，否则用后者。
+			<br /><span class="label label-danger">controllerAs</span>
+			<br />重命名controller的名字。
+			<br /><span class="label label-danger">compile</span>
+			<br />compile负责指令到html标签的解析和变换，是指令解析的第一阶段。
+			<br /><span class="label label-danger">link</span>
+			<br />link则负责对标签进行数据、事件的绑定，是指令执行的第二阶段。
+			<br />
 		</p><br/>
-		<p>
-			4.在js中定义模块(module)和控制器(controller)
-			<pre>
-				var metronicApp = angular.module("MetronicApp", []); 	//定义模块，注意与angular.module("MetronicApp")的区别
-				
-				//注意区别：metronicApp.controller('metronicCtrl', function($scope, $rootScope) { ... });
-				metronicApp.controller('metronicCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-					//do something ...
-				}]);
-			</pre>
-		</p><br/>
-		<p>
-			5.完了。但加点解释：
-			<br />angular是一个内置对象，可以通过angular.module("MetronicApp", [])方法来构建一个模块。
-			<br />在模块方法metronicApp.controller('metronicCtrl',function( ... ){ ... })构造一个controller，负责控制ng-controller='metronicCtrl'的视图范围
-		</p><br/>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<img src="../img/directives_1.png" width="1000"/>
+		</div>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-sm-12"><h3>世界上最简单的指令</h3></div>
+		<div class="col-sm-12">
+			<hello></hello><img src="../img/directives_2.png" width="400"/>
+		</div>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-sm-12"><h3>指令实际应用</h3></div>
+		<div class="col-sm-6">
+			这里有一个机密，只要求是公司员工级别就能看
+			<input hasPermission="staff:staff" type="text" placeholder="假装这个input是一个机密"/>
+		</div>
+		<div class="col-sm-6">
+			实际上这里还有一个机密，只是要求管理员级别权限才能看。看不见了吧！
+			<input hasPermission="staff:admin" type="text" placeholder="假装这个input更加机密"/>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-12">
+			<img src="../img/directives_3.png" width="1000"/>
+		</div>
+	</div><br />
+	<div class="row">
+		<div class="col-sm-12">
+			<img src="../img/directives_4.png" width="1000"/>
+		</div>
 	</div>
 </div>
 <!-- END MAIN CONTENT -->

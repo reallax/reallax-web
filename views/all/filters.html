@@ -36,7 +36,8 @@
 		<div class="col-sm-12"><h3>内建filter举例</h3></div>
 		<div class="col-sm-12">
 			<a class="btn btn-info" ng-click="getNowDate()">当前时间</a>
-			&nbsp;<span class="label label-danger">{{ nowDate | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+			输入格式：<input type="text" ng-model="dateFomate" /> 
+			&nbsp;<span class="label label-danger">{{ nowDate | date:dateFomate}}</span>
 		</div>
 	</div>
 	<hr />
