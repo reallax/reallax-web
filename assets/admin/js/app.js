@@ -8,14 +8,18 @@ var MetronicApp = angular.module("MetronicApp", [
     "ui.bootstrap", 
     "oc.lazyLoad",  
     "ngSanitize",
-    "ngPermission"
+    "ngPermission",
+    "ngCookies"
 ]); 
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
-MetronicApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+MetronicApp.config(['$ocLazyLoadProvider', 'LoginProviderProvider', 'PurposeCnst', 
+	function($ocLazyLoadProvider, LoginProviderProvider, PurposeCnst) {
+		
     $ocLazyLoadProvider.config({
         cssFilesInsertBefore: 'ng_load_plugins_before' // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
     });
+    LoginProviderProvider.purpose = PurposeCnst.self;
 }]);
 
 /* Setup global settings */
@@ -37,11 +41,15 @@ MetronicApp.factory('settings', ['$rootScope', function($rootScope) {
 }]);
 
 /* Setup App Main Controller */
-MetronicApp.controller('AppController', ['$scope', '$rootScope', function($scope, $rootScope) {
+MetronicApp.controller('AppController', ['$scope', '$rootScope', 'authService', function($scope, $rootScope, authService) {
     $scope.$on('$viewContentLoaded', function() {
         Metronic.initComponents(); // init core components
         //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive 
     });
+    
+    $scope.logotClick = function() {
+    	authService.logout();
+    }
 }]);
 
 /***
