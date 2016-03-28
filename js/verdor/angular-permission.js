@@ -62,42 +62,24 @@ angular.module("ngPermission", [])
 			}
 		}
 	})
-	.service("authService", function($window, $cookies, $browser, LoginProvider, PurposeCnst, MySession) {
+	.service("authService", function($window, $cookies, $browser, LoginProvider, PurposeCnst) {
 		var cookieKey = "UYBFEWAEE";
 		
 		this.isAuth = function() {
-			if(LoginProvider.purpose === PurposeCnst.show) {
-				var cv = $cookies[cookieKey];
-				if(!!cv) {
-					return true;
-				}
-				else {
-					return false;
-				}
+			var cv = $cookies[cookieKey];
+			if(!!cv) {
+				return true;
 			}
 			else {
-				return !!MySession.name;
+				return false;
 			}
 		}
-		this.createSession = function(name) {
-			MySession.create(name);
+		this.createCookies = function(name) {
+			$.cookie(cookieKey, name);
 		}
 		this.logout = function() {
-			if(LoginProvider.purpose === PurposeCnst.show) {
-				$.cookie(cookieKey, '', {expires: -1, path: '/', domain: 'dmall.com', secure: true});
-			}
-			else {
-				MySession.destroy();
-			}
+			$.cookie(cookieKey, '', {expires: -1, path: '/', domain: 'dmall.com', secure: true});
+			$.cookie(cookieKey, '', {expires: -1, path: '/', domain: '127.0.0.1', secure: true});
 			$window.location.reload();
 		}
-	})
-	.service('MySession', function() {
-		this.name = null;
-		this.create = function(name) {
-			this.name = name;
-		};
-		this.destroy = function() {
-			this.name = null;
-		};
 	});

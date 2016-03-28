@@ -6,6 +6,8 @@
 		$scope.clickEvent = function() {
 			var btn = angular.element(document.getElementById("testBtn"));
 			btn.after("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' value='" + $scope.inputShow + "'>");
+			//jquery的$符号没有被污染，依然可以在controller中直接使用。可以注释上两行，放开下一行测试，依然有效
+			//$(".testBtn").after("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' value='" + $scope.inputShow + "'>")
 		}
 		
 		var myChart = echarts.init(document.getElementById("barDiv"));

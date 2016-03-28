@@ -512,6 +512,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="../../assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
 <script src="../../assets/admin/pages/scripts/login-soft.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
+<script src="../../js/verdor/angular-permission.js" type="text/javascript"></script>
+<script src="../../js/verdor/angular-cookies.js" type="text/javascript"></script>
 <script>
 jQuery(document).ready(function() {
 	Metronic.init(); // init metronic core components
@@ -529,7 +531,7 @@ jQuery(document).ready(function() {
 		duration: 8000
 	});
 });
-var loginModule = angular.module("loginModule", ["MetronicApp"]);
+var loginModule = angular.module("loginModule", ["ngPermission", "ngCookies"]);
 loginModule.controller("loginCtrl", ["$scope", "$window", "authService", function($scope, $window, authService) {
 	$scope.loginClick = function() {
 		if(!$scope.user.name || $scope.user.name !== "reallax") {
@@ -540,9 +542,10 @@ loginModule.controller("loginCtrl", ["$scope", "$window", "authService", functio
 			alert("密码不对！");
 			return;
 		}
-		authService.createSession($scope.user.name);
-//		$window.location.herf = "http://reallax.dmall.com/views";
-		window.location = "http://reallax.dmall.com/views";
+		//authService.createCookies($scope.user.name);
+		//$.cookie("UYBFEWAEE", $scope.user.name, {expires: 1, path: '/', domain: 'dmall.com'});
+		$.cookie("UYBFEWAEE", $scope.user.name, {expires: 1, path: '/', domain: '127.0.0.1'});
+		window.location = "/reallax-web/views/index.html";
 	}
 }]);
 </script>

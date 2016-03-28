@@ -36,7 +36,7 @@
 	<div style="height:500px;" id="barDiv"></div>
 	<hr /> 数据双向绑定：
 	<input ng-model="inputShow" type="text" /><br /><br /> 测试点击按钮：
-	<button ng-click="clickEvent()" type="button" id="testBtn">点来试试</button>
+	<button ng-click="clickEvent()" type="button" id="testBtn" class="testBtn">点来试试</button>
 	<div class="note note-success note-bordered">
 		<textarea cols="2" style="width: 800px;">angular.element( document.getElementById("testBtn") ).after("<input type='text' value='" + $scope.inputShow + "'>");
 		</textarea>
